@@ -1,0 +1,13 @@
+/* 
+    Created on : 16 nov. 2021, 16:44:10
+    Author     : Sasha
+*/
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+/*
+    white, firebrick, midnightblue y black
+*/
+
+body{
+    font-family: 'Roboto', 'Tahoma Regular', sans-serif;
+}
