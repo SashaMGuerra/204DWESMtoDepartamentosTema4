@@ -3,17 +3,12 @@
     Autor: Isabel Martínez Guerra.
     Fecha: 16/11/2021
 -->
-<html>
+<html lang="es">
     <head>
         <meta charset="UTF-8">
         <link href="../webroot/style/mtoDepartamentos.css" rel="stylesheet" type="text/css"/>
         <title>Mantenimiento departamentos - Página principal</title>
         <style>
-            form, table{
-                margin: auto;
-                width: 100%;
-                max-width: 900px;
-            }
             form{
                 margin-top: 10px;
             }
@@ -32,15 +27,8 @@
                 border: none;
                 text-align: right;
             }
-            
-            input[type='submit']{
-                border: 2px solid midnightblue;
-                text-transform: uppercase;
-                font-weight: bold;
-                color: midnightblue;
+            input[type='text']{
                 background-color: lavender;
-                padding: 5px 10px;
-                cursor: pointer;
             }
             
             table.departamentos{
@@ -49,11 +37,13 @@
             }
             caption{
                 padding-bottom: 5px;
+                text-transform: uppercase;
+                font-weight: bold;
             }
             table.departamentos td{
                 padding: 0 20px;
             }
-            table.departamentos tr:nth-child(even) td{
+            table.departamentos tr:nth-child(even) td, table.departamentos tr:nth-child(even) th{
                 background-color: mistyrose;
             }
             table.departamentos tr:first-child th{
@@ -76,6 +66,7 @@
          */
         ?>
         <header>
+            <a class="volver" href="../index.php">Volver</a>
             <h1>Mantenimiento Departamentos</h1>
         </header>
         <main>
@@ -134,7 +125,6 @@
             /*
              * Si el formulario no ha sido enviado, pone el manejador de errores
              * a false para que no entre en el if tras envío correcto.
-             * 
              */
             else {
                 $bEntradaOK = false;
@@ -235,7 +225,7 @@
                         echo "<td>".$aDepartamento['fechaBaja']."</td>";
                         echo "<td>".$aDepartamento['volumenNegocio']."</td>";
                         ?>
-                        <th><img src="../webroot/media/img/modify.png" alt="modificar"/></th>
+                        <th><a href="modificar.php"><img src="../webroot/media/img/modify.png" alt="modificar"/></a></th>
                         <th><img src="../webroot/media/img/delete.png" alt="eliminar"/></th>
                         <th><img src="../webroot/media/img/view.png" alt="ver"/></th>
                         </tr>

@@ -2,6 +2,6 @@
 USE DB204DWESMtoDepartamentosTema4;
 
 INSERT INTO Departamento VALUES
-('VEN', 'Ventas', null, 250.51),
-('COM', 'Compras', null, 200.30),
-('MAR', 'Marketing', null, 330.33);
+('MAT', 'Matemáticas', null, 250.51),
+('LIT', 'Literatura', null, 200.30),
+('HIS', 'Historia', null, 330.33);
