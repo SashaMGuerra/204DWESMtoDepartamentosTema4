@@ -5,9 +5,30 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 
 /*
-    white, firebrick, midnightblue y black
+    white, firebrick, lavender, midnightblue y black
 */
+
+*{
+    margin: 0;
+    
+}
 
 body{
     font-family: 'Roboto', 'Tahoma Regular', sans-serif;
+}
+
+header{
+    padding: 20px 0;
+    text-align: center;
+    background-color: lavender;
+    
+}
+
+
+a{
+    text-decoration: none;
+    color: midnightblue;
+}
+a:active{
+    color: firebrick;
 }
