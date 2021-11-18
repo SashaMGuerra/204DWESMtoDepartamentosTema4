@@ -50,6 +50,7 @@
                 padding: 5px 0;
                 border-bottom: 1px solid firebrick;
             }
+            
             img{
                 width: 30px;
             }
@@ -225,7 +226,7 @@
                         echo "<td>".$aDepartamento['fechaBaja']."</td>";
                         echo "<td>".$aDepartamento['volumenNegocio']."</td>";
                         ?>
-                        <th><a href="modificar.php"><img src="../webroot/media/img/modify.png" alt="modificar"/></a></th>
+                        <th><a href="updateDepartamento.php?codDepartamentoEnCurso=<?php echo urlencode($aDepartamento['codDepartamento']); ?>"><img src="../webroot/media/img/modify.png" alt="modificar"/></a></th>
                         <th><img src="../webroot/media/img/delete.png" alt="eliminar"/></th>
                         <th><img src="../webroot/media/img/view.png" alt="ver"/></th>
                         </tr>

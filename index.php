@@ -46,6 +46,7 @@
         </header>
         <main>
             <a class="button" href="codigoPHP/MtoDepartamentos.php">Ir a la aplicación</a>
+            <a class="volver" href="../proyectoTema4/indexProyectoTema4.php">Salir</a>
         </main>
         <footer>
             <a href="https://github.com/SashaMGuerra/204DWESMtoDepartamentosTema4"><img src="webroot/media/img/github_logo_white.png" alt=""/></a>
