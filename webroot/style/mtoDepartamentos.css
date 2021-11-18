@@ -5,9 +5,76 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 
 /*
-    white, firebrick, midnightblue y black
+    white, mistyrose, firebrick, lavender,  midnightblue y black
 */
+
+*{
+    margin: 0;
+
+}
 
 body{
     font-family: 'Roboto', 'Tahoma Regular', sans-serif;
+}
+
+header{
+    padding: 20px 0;
+    text-align: center;
+    background-color: lavender;
+}
+a.volver{
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    border: 2px solid firebrick;
+    padding: 5px 10px;
+    text-transform: uppercase;
+    font-weight: bold;
+    background-color: mistyrose;
+    font-size: 11px;
+}
+a.volver{
+    color: midnightblue;
+}
+a.volver:active{
+    color: firebrick;
+}
+
+a{
+    text-decoration: none;
+    color: midnightblue;
+}
+a:active{
+    color: firebrick;
+}
+a.button{
+    font-size: small;
+    display: inline-block;
+    border: 2px solid midnightblue;
+    text-transform: uppercase;
+    font-weight: bold;
+    background-color: lavender;
+    padding: 5px 10px;
+    text-decoration: none;
+}
+
+input[type='submit']{
+    font-size: small;
+    border: 2px solid midnightblue;
+    text-transform: uppercase;
+    font-weight: bold;
+    color: midnightblue;
+    background-color: lavender;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+input[type="submit"]:active{
+    color: firebrick;
+}
+
+
+form, table{
+    margin: auto;
+    width: 100%;
+    max-width: 900px;
 }
