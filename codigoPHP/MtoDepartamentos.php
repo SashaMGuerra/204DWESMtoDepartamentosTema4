@@ -226,7 +226,7 @@
                         echo "<td>".$aDepartamento['fechaBaja']."</td>";
                         echo "<td>".$aDepartamento['volumenNegocio']."</td>";
                         ?>
-                        <th><a href="updateDepartamento.php?codDepartamentoEnCurso=<?php echo urlencode($aDepartamento['codDepartamento']); ?>"><img src="../webroot/media/img/modify.png" alt="modificar"/></a></th>
+                        <th><a href="editarDepartamento.php?codDepartamentoEnCurso=<?php echo urlencode($aDepartamento['codDepartamento']); ?>"><img src="../webroot/media/img/modify.png" alt="modificar"/></a></th>
                         <th><img src="../webroot/media/img/delete.png" alt="eliminar"/></th>
                         <th><img src="../webroot/media/img/view.png" alt="ver"/></th>
                         </tr>

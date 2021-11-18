@@ -19,6 +19,10 @@
                 margin-top: 50px;
                 font-size: medium;
             }
+            div:last-child a.button{
+                padding: 5px 10px;
+            }
+            
             footer{
                 text-align: center;
                 background-color: midnightblue;
@@ -45,8 +49,12 @@
             <h1>Tema 4 - Mantenimiento Departamentos</h1>
         </header>
         <main>
-            <a class="button" href="codigoPHP/MtoDepartamentos.php">Ir a la aplicación</a>
-            <a class="volver" href="../proyectoTema4/indexProyectoTema4.php">Salir</a>
+            <div class="btContainer">
+                <a class="button" href="codigoPHP/MtoDepartamentos.php">Ir a la aplicación</a>
+            </div>
+            <div class="btContainer">
+                <a class="button" href="../proyectoTema4/indexProyectoTema4.php">Salir</a>
+            </div>
         </main>
         <footer>
             <a href="https://github.com/SashaMGuerra/204DWESMtoDepartamentosTema4"><img src="webroot/media/img/github_logo_white.png" alt=""/></a>
