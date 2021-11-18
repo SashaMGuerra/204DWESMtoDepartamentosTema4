@@ -120,6 +120,10 @@ if ($bEntradaOK) {
             header{
                 padding: 15px 0;
             }
+            
+            form{
+                max-width: 900px;
+            }
 
             fieldset.acciones{
                 margin-top: 10px;

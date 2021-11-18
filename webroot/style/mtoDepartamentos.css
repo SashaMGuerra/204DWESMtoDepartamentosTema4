@@ -76,5 +76,5 @@ input[type="submit"]:active{
 form, table{
     margin: auto;
     width: 100%;
-    max-width: 900px;
+    max-width: 1200px;
 }
