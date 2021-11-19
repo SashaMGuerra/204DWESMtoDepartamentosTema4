@@ -8,6 +8,14 @@
  * Ventana de modificación de datos de un departamento.
  */
 
+/**
+ * Si el formulario ha sido cancelado, regresa a la página anterior sin realizar
+ * ninguna acción.
+ */
+if(isset($_REQUEST['cancelar'])){
+    header('Location: MtoDepartamentos.php');
+}
+
 //Librería de validación.
 include '../core/210322ValidacionFormularios.php';
 
@@ -27,14 +35,6 @@ $aErrores = [
     'descDepartamento' => '',
     'volumenNegocio' => ''
 ];
-
-/**
- * Si el formulario ha sido cancelado, regresa a la página anterior sin realizar
- * ninguna acción.
- */
-if(isset($_REQUEST['cancelar'])){
-    header('Location: MtoDepartamentos.php');
-}
 
 /**
  * Si el formulario se ha enviado, valida los campos y registra los errores.
