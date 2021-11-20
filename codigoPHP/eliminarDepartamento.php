@@ -2,17 +2,16 @@
 <?php
 /**
  * @author Sasha
- * @since 17/11/2021
- * Fecha de modificación: 18/11/2021
+ * @since 20/11/2021
+ * Fecha de modificación: 20/11/2021
  * 
- * Ventana de modificación de datos de un departamento.
+ * Ventana de confirmación de eliminación de un departamento.
  */
-
 /**
  * Si el formulario ha sido cancelado, regresa a la página anterior sin realizar
  * ninguna acción.
  */
-if(isset($_REQUEST['cancelar'])){
+if (isset($_REQUEST['cancelar'])) {
     header('Location: MtoDepartamentos.php');
 }
 
@@ -21,9 +20,6 @@ include '../core/210322ValidacionFormularios.php';
 
 // Constantes para la conexión con la base de datos.
 require_once '../config/configDB.php';
-
-// Constantes para el parámetro "obligatorio".
-require_once '../config/constValidacion.php';
 
 $aFormulario = [
     'codDepartamento' => $_REQUEST['codDepartamentoEnCurso'],
@@ -37,50 +33,13 @@ $aErrores = [
 ];
 
 /**
- * Si el formulario se ha enviado, valida los campos y registra los errores.
+ * Si el formulario se ha enviado con aceptar, elimina el departamento.
  */
-if(isset($_REQUEST['aceptar'])){
-    // Manejador de errores. Por defecto asume que no hay.
-    $bEntradaOK = true;
-
-    // Registro de errores: validación de campos.
-    $aErrores['descDepartamento'] = validacionFormularios::comprobarAlfanumerico($_REQUEST['descDepartamento'], 255, 5, OBLIGATORIO);
-    $aErrores['volumenNegocio'] = validacionFormularios::comprobarFloat($_REQUEST['volumenNegocio'], 5000, 0, OBLIGATORIO);
-
-    /*
-     * Recorrido del array de errores.
-     * Si existe alguno, cambia el manejador de errores a false
-     * y limpia el campo en el $_REQUEST.
-     */
-    foreach ($aErrores as $sCampo => $sError) {
-        if ($sError != null) {
-            $_REQUEST[$sCampo] = ''; //Limpieza del campo.
-            $bEntradaOK = false;
-        }
-    }
-}
-/*
- * Si el formulario no ha sido enviado, pone el manejador de errores
- * a false para que no entre en el if tras envío correcto.
- */
-else {
-    $bEntradaOK = false;
-}
-
-/**
- * Si la entrada es correcta, actualiza los campos y retorna a la página anterior.
- */
-if ($bEntradaOK) {
-    // Recogida de la información.
-    $aFormulario['descDepartamento'] = $_REQUEST['descDepartamento'];
-    $aFormulario['volumenNegocio'] = $_REQUEST['volumenNegocio'];
-
-    // Modificación de la base de datos.
+if (isset($_REQUEST['aceptar'])) {
+    // Eliminaciónde la base de datos.
     try {
         $sConsulta = <<<QUERY
-            UPDATE Departamento SET descDepartamento = :modDescripcion,
-            volumenNegocio = :modVolumenNegocio
-            WHERE codDepartamento= '{$aFormulario['codDepartamento']}';
+            DELETE FROM Departamento WHERE codDepartamento = '{$aFormulario['codDepartamento']}';
         QUERY;
 
         // Conexión con la base de datos.
@@ -91,10 +50,6 @@ if ($bEntradaOK) {
 
         // Ejecución dela consulta.
         $oConsulta = $oDB->prepare($sConsulta);
-
-        $oConsulta->bindParam(':modDescripcion', $aFormulario['descDepartamento']);
-        $oConsulta->bindParam(':modVolumenNegocio', $aFormulario['volumenNegocio']);
-        
         $oConsulta->execute();
 
         // Regreso a la página principal
@@ -110,18 +65,17 @@ if ($bEntradaOK) {
         unset($oDB);
     }
 }
-
 ?>
-<html>
+<html lang="es">
     <head>
         <meta charset="UTF-8">
-        <title>Mantenimiento departamentos - Modificar departamento</title>
+        <title>Mantenimiento departamentos - Eliminar departamento</title>
         <link href="../webroot/style/mtoDepartamentos.css" rel="stylesheet" type="text/css"/>
         <style>
             header{
                 padding: 15px 0;
             }
-            
+
             form{
                 max-width: 900px;
             }
@@ -138,6 +92,7 @@ if ($bEntradaOK) {
                 background-color: lavender;
             }
 
+
             table{
                 table-layout: fixed;
             }
@@ -153,38 +108,45 @@ if ($bEntradaOK) {
             }
 
             fieldset.envio{
+                margin: 0;
+                padding: 0;
                 text-align: center;
                 border: none;
             }
+            fieldset.envio label{
+                display: block;
+                padding: 5px 0;
+                margin: 5px 0;
+                background-color: mistyrose;
+                border: 2px solid firebrick;
+            }
+            
             input#cancelar{
+                border: 2px solid firebrick;
+                color: firebrick;
+                background-color: mistyrose;
                 margin-right: 15%;
+            }
+            input#cancelar:active{
+                color: midnightblue;
             }
             input#aceptar{
                 margin-left: 15%;
             }
 
-            label.obligatorio:after{
-                content: '*';
-                color: red;
-            }
-            input.obligatorio{
-                background-color: mistyrose;
-            }
         </style>
     </head>
     <body>
         <header>
             <a class="volver" href="MtoDepartamentos.php">Volver</a>
-            <h2>Modificación de departamento</h2>
+            <h2>Eliminación de departamento</h2>
         </header>
         <main>
             <?php
             /**
-             * Si es la primera vez que se accede a la página, o si se ha enviado
-             * el formulario con datos incorectos, se muestra el formulario con
-             * la información del departamento cuyo código se ha pasado por la url.
+             * Al accederse a la página, se muestra el formulario con la información
+             * del departamento cuyo código se ha pasado por la url.
              */
-            
             try {
                 $sConsulta = <<<QUERY
                     SELECT * FROM Departamento WHERE codDepartamento = '{$_REQUEST['codDepartamentoEnCurso']}';
@@ -198,12 +160,14 @@ if ($bEntradaOK) {
                 $oConsulta = $oDB->prepare($sConsulta);
                 $oConsulta->execute();
                 $oResultadoConsulta = $oConsulta->fetch();
-                
+
+                /**
+                 * Recogida de los datos del departamento.
+                 */
                 $aFormulario['codDepartamento'] = $oResultadoConsulta['codDepartamento'];
                 $aFormulario['descDepartamento'] = $oResultadoConsulta['descDepartamento'];
                 $aFormulario['fechaBaja'] = $oResultadoConsulta['fechaBaja'];
                 $aFormulario['volumenNegocio'] = $oResultadoConsulta['volumenNegocio'];
-                 
             } catch (PDOException $exception) {
                 /*
                  * Mostrado del código de error y su mensaje.
@@ -214,41 +178,36 @@ if ($bEntradaOK) {
             } finally {
                 unset($oDB);
             }
-            
+
             /**
-             * Por cada input editable, si la variable $_REQUEST no existe o
-             * su valor es '' (fue limpiada por existir error), muestra la información
-             * que el campo tenía originalmente.
-             * Si existe y tiene valor, muestra esa información.
+             * Mostrado de la información de los campos.
+             * Si fechaBaja no tiene valor, muestra una raya -
              */
             ?>
             <form action="<?php echo $_SERVER['PHP_SELF'] . "?codDepartamentoEnCurso=" . $aFormulario['codDepartamento'] ?>" method="post">
                 <fieldset class="acciones">
-                    <legend>Modificación</legend>
+                    <legend>Eliminación</legend>
                     <table>
                         <tr>
                             <td><label for="codDepartamento">Código</label></td>
                             <td><input type="text" id="codDepartamento" name="codDepartamento" value="<?php echo $aFormulario['codDepartamento'] ?>" disabled></td>
-                            <td></td>
                         </tr>
                         <tr>
-                            <td><label class="obligatorio" for="descDepartamento">Descripción</label></td>
-                            <td><input class="obligatorio" type="text" id="descDepartamento" name="descDepartamento" value="<?php echo !isset($_REQUEST['descDepartamento']) || $_REQUEST['descDepartamento']==''?$aFormulario['descDepartamento']:$_REQUEST['descDepartamento'];?>"></td>
-                            <td><?php echo '<span>' . $aErrores['descDepartamento'] . '</span>' ?></td>
+                            <td><label for="descDepartamento">Descripción</label></td>
+                            <td><input type="text" id="descDepartamento" name="descDepartamento" value="<?php echo $aFormulario['descDepartamento'] ?>" disabled></td>
                         </tr>
                         <tr>
                             <td><label for="fechaBaja">Fecha baja</label></td>
                             <td><input type="text" id="fechaBaja" name="fechaBaja" value="<?php echo $aFormulario['fechaBaja'] ?? '-' ?>" disabled=""></td>
-                            <td></td>
                         </tr>
                         <tr>
-                            <td><label class="obligatorio" for="volumenNegocio">Volumen negocio</label></td>
-                            <td><input class="obligatorio" type="text" id="volumenNegocio" name="volumenNegocio" value="<?php echo !isset($_REQUEST['volumenNegocio']) || $_REQUEST['volumenNegocio']==''?$aFormulario['volumenNegocio']:$_REQUEST['volumenNegocio'];?>"></td>
-                            <td><?php echo '<span>' . $aErrores['volumenNegocio'] . '</span>' ?></td>
+                            <td><label for="volumenNegocio">Volumen negocio</label></td>
+                            <td><input type="text" id="volumenNegocio" name="volumenNegocio" value="<?php echo $aFormulario['volumenNegocio'] ?>" disabled></td>
                         </tr>
                     </table>
                 </fieldset>
                 <fieldset class="envio">
+                    <label for="aceptar">¿Está seguro de que quiere eliminar el departamento?</label>
                     <input type="submit" name="cancelar" id="cancelar" value="Cancelar">
                     <input type="submit" name="aceptar" id="aceptar" value="Aceptar">
                 </fieldset>
