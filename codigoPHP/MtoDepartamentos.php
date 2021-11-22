@@ -225,7 +225,7 @@
                             </table>
                         </fieldset>
                         <fieldset class="envio">
-                            <input type="submit" name="submit" id="submit">
+                            <input type="submit" name="submit" id="submit" value="Buscar">
                         </fieldset>
                     </div>
                     <fieldset class="acciones">
