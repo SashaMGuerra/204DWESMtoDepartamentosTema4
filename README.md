@@ -10,6 +10,8 @@ Aplicación de mantenimiento de una tabla simple con departamentos.
 ## Entornos.
 ### Desarrollo.
 * http://daw204.sauces.local/204DWESMtoDepartamentosTema4/MtoDepartamentos.php
+### Explotación.
+* https://daw204.ieslossauces.es/MtoDepartamentosTema4/index.php
 
 ## License.
 Este proyecto tiene licencia MIT.
