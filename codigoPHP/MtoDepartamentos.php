@@ -12,8 +12,15 @@
             form{
                 margin-top: 10px;
             }
-            fieldset.busqueda{
+
+            div.fieldsetContainer{
+                margin: 0 3px;
                 text-align: center;
+                display: flex;
+                align-items: center;
+            }
+
+            fieldset.busqueda{
                 border: 2px solid midnightblue;
             }
             fieldset.busqueda legend{
@@ -23,6 +30,22 @@
                 color: midnightblue;
                 background-color: lavender;
             }
+            
+            div.fieldsetBusqueda{
+                flex-basis: 100%;
+            }
+            
+            fieldset.acciones{
+                padding: 0;
+                margin-left: 5%;
+                border: none;
+                display: flex;
+                flex-direction: column;
+            }
+            fieldset.acciones a{
+                margin: 5px 0;
+            }
+            
             fieldset.envio{
                 border: none;
                 text-align: right;
@@ -30,7 +53,7 @@
             input[type='text']{
                 background-color: lavender;
             }
-            
+
             table.departamentos{
                 border-top: 2px solid firebrick;
                 border-collapse: collapse;
@@ -50,7 +73,7 @@
                 padding: 5px 0;
                 border-bottom: 1px solid firebrick;
             }
-            
+
             img{
                 width: 30px;
             }
@@ -94,7 +117,7 @@
             $aErrores = [
                 'descDepartamento' => ''
             ];
-            
+
             /*
              * Si el formulario ha sido enviado, valida el campo y registra los errores.
              */
@@ -126,8 +149,7 @@
             /*
              * Si el formulario no ha sido enviado, pone el manejador de errores
              * a false para que no entre en el if tras envío correcto.
-             */
-            else {
+             */ else {
                 $bEntradaOK = false;
             }
 
@@ -154,7 +176,7 @@
 
                 // Query de búsqueda.
                 $sConsulta = <<<QUERY
-                    SELECT * FROM Departamento WHERE descDepartamento LIKE '%{$aFormulario['descDepartamento']}%';
+                    SELECT * FROM T02_Departamento WHERE T02_DescDepartamento LIKE '%{$aFormulario['descDepartamento']}%';
                 QUERY;
 
                 /*
@@ -167,7 +189,6 @@
                  * Recogida de la información del select.
                  */
                 $aDepartamentos = $oResultadoConsulta->fetchAll();
-
             } catch (PDOException $exception) {
                 /*
                  * Mostrado del código de error y su mensaje.
@@ -178,7 +199,7 @@
             } finally {
                 unset($oDB);
             }
-            
+
             /*
              * Formulario de búsqueda. Siempre se muestra, se haya enviado
              * o no la información.
@@ -187,23 +208,36 @@
              */
             ?>
             <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
-                <fieldset class="busqueda">
-                    <legend>Búsqueda de departamentos</legend>
-                    <table>
-                        <tr>
-                            <td><label for="descDepartamento">Departamento a buscar</label></td>
-                        </tr>
-                        <tr>
-                            <td><input type="text" name="descDepartamento" id="descDepartamento" value="<?php echo $_REQUEST['descDepartamento'] ?? '' ?>"></td>
-                        </tr>
-                        <tr>
-                            <td><?php echo '<span>' . $aErrores['descDepartamento'] . '</span>' ?></td>
-                        </tr>
-                    </table>
-                </fieldset>
-                <fieldset class="envio">
-                    <input type="submit" name="submit" id="submit">
-                </fieldset>
+                <div class="fieldsetContainer">
+                    <div class="fieldsetBusqueda">
+                        <fieldset class="busqueda">
+                            <legend>Búsqueda de departamentos</legend>
+                            <table>
+                                <tr>
+                                    <td><label for="descDepartamento">Departamento a buscar</label></td>
+                                </tr>
+                                <tr>
+                                    <td><input type="text" name="descDepartamento" id="descDepartamento" value="<?php echo $_REQUEST['descDepartamento'] ?? '' ?>"></td>
+                                </tr>
+                                <tr>
+                                    <td><?php echo '<span>' . $aErrores['descDepartamento'] . '</span>' ?></td>
+                                </tr>
+                            </table>
+                        </fieldset>
+                        <fieldset class="envio">
+                            <input type="submit" name="submit" id="submit" value="Buscar">
+                        </fieldset>
+                    </div>
+                    <fieldset class="acciones">
+                        <a class="button" href="crearDepartamento.php">Añadir</a>
+                        <!-- 
+                        <a class="button" href="importarDepartamentos.php">Importar</a>
+                        <a class="button" href="exportarDepartamentos.php">Exportar</a>
+                        -->
+                        <a class="button">Importar</a>
+                        <a class="button">Exportar</a>
+                    </fieldset>
+                </div>
             </form>
             <table class="departamentos">
                 <caption>Departamentos</caption>
@@ -215,23 +249,23 @@
                     <th colspan="3">
                 </tr>
                 <?php
-                    /*
-                     * Mostrado de la información del select.
-                     * Al abrirse la aplicación, muestra todos los departamentos.
-                     */
-                    foreach ($aDepartamentos as $aDepartamento) {
-                        echo '<tr>';
-                        echo "<td>".$aDepartamento['codDepartamento']."</td>";
-                        echo "<td>".$aDepartamento['descDepartamento']."</td>";
-                        echo "<td>".$aDepartamento['fechaBaja']."</td>";
-                        echo "<td>".$aDepartamento['volumenNegocio']."</td>";
-                        ?>
-                        <th><a href="editarDepartamento.php?codDepartamentoEnCurso=<?php echo urlencode($aDepartamento['codDepartamento']); ?>"><img src="../webroot/media/img/modify.png" alt="modificar"/></a></th>
-                        <th><img src="../webroot/media/img/delete.png" alt="eliminar"/></th>
-                        <th><img src="../webroot/media/img/view.png" alt="ver"/></th>
-                        </tr>
-                        <?php
-                    }
+                /*
+                 * Mostrado de la información del select.
+                 * Al abrirse la aplicación, muestra todos los departamentos.
+                 */
+                foreach ($aDepartamentos as $aDepartamento) {
+                    echo '<tr>';
+                    echo "<td>" . $aDepartamento['T02_CodDepartamento'] . "</td>";
+                    echo "<td>" . $aDepartamento['T02_DescDepartamento'] . "</td>";
+                    echo "<td>" . $aDepartamento['T02_FechaBajaDepartamento'] . "</td>";
+                    echo "<td>" . $aDepartamento['T02_VolumenDeNegocio'] . "</td>";
+                    ?>
+                    <th><a href="editarDepartamento.php?codDepartamentoEnCurso=<?php echo urlencode($aDepartamento['T02_CodDepartamento']); ?>"><img src="../webroot/media/img/modify.png" alt="modificar"/></a></th>
+                    <th><a href="eliminarDepartamento.php?codDepartamentoEnCurso=<?php echo urlencode($aDepartamento['T02_CodDepartamento']); ?>"><img src="../webroot/media/img/delete.png" alt="eliminar"/></a></th>
+                    <th><a href="verDepartamento.php?codDepartamentoEnCurso=<?php echo urlencode($aDepartamento['T02_CodDepartamento']); ?>"><img src="../webroot/media/img/view.png" alt="ver"/></a></th>
+                    </tr>
+                    <?php
+                }
                 ?>
             </table>
         </main>

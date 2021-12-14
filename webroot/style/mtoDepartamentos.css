@@ -58,6 +58,7 @@ a.button{
     text-decoration: none;
 }
 
+
 input[type='submit']{
     font-size: small;
     border: 2px solid midnightblue;
@@ -76,5 +77,5 @@ input[type="submit"]:active{
 form, table{
     margin: auto;
     width: 100%;
-    max-width: 900px;
+    max-width: 1200px;
 }

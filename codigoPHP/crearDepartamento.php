@@ -2,10 +2,10 @@
 <?php
 /**
  * @author Sasha
- * @since 17/11/2021
- * Fecha de modificación: 18/11/2021
+ * @since 20/11/2021
+ * Fecha de modificación: 20/11/2021
  * 
- * Ventana de modificación de datos de un departamento.
+ * Ventana de creación de un departamento.
  */
 
 /**
@@ -26,12 +26,13 @@ require_once '../config/configDB.php';
 require_once '../config/constValidacion.php';
 
 $aFormulario = [
-    'codDepartamento' => $_REQUEST['codDepartamentoEnCurso'],
+    'codDepartamento' => '',
     'descDepartamento' => '',
     'fechaBaja' => '',
     'volumenNegocio' => ''
 ];
 $aErrores = [
+    'codDepartamento' => '',
     'descDepartamento' => '',
     'volumenNegocio' => ''
 ];
@@ -44,6 +45,7 @@ if(isset($_REQUEST['aceptar'])){
     $bEntradaOK = true;
 
     // Registro de errores: validación de campos.
+    $aErrores['codDepartamento'] = validacionFormularios::comprobarAlfabetico($_REQUEST['codDepartamento'], 3, 3, OBLIGATORIO);
     $aErrores['descDepartamento'] = validacionFormularios::comprobarAlfanumerico($_REQUEST['descDepartamento'], 255, 5, OBLIGATORIO);
     $aErrores['volumenNegocio'] = validacionFormularios::comprobarFloat($_REQUEST['volumenNegocio'], 5000, 0, OBLIGATORIO);
 
@@ -72,15 +74,15 @@ else {
  */
 if ($bEntradaOK) {
     // Recogida de la información.
+    $aFormulario['codDepartamento'] = $_REQUEST['codDepartamento'];
     $aFormulario['descDepartamento'] = $_REQUEST['descDepartamento'];
     $aFormulario['volumenNegocio'] = $_REQUEST['volumenNegocio'];
 
     // Modificación de la base de datos.
     try {
         $sConsulta = <<<QUERY
-            UPDATE T02_Departamento SET T02_DescDepartamento = :modDescripcion,
-            T02_VolumenDeNegocio = :modVolumenNegocio
-            WHERE T02_CodDepartamento= '{$aFormulario['codDepartamento']}';
+            INSERT INTO T02_Departamento(T02_CodDepartamento, T02_DescDepartamento, T02_FechaCreacionDepartamento, T02_VolumenDeNegocio) VALUES
+            ('{$aFormulario['codDepartamento']}', '{$aFormulario['descDepartamento']}', UNIX_TIMESTAMP() ,{$aFormulario['volumenNegocio']});
         QUERY;
 
         // Conexión con la base de datos.
@@ -89,16 +91,13 @@ if ($bEntradaOK) {
         // Mostrado de las excepciones.
         $oDB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        // Ejecución dela consulta.
+        // Ejecución de la consulta.
         $oConsulta = $oDB->prepare($sConsulta);
-
-        $oConsulta->bindParam(':modDescripcion', $aFormulario['descDepartamento']);
-        $oConsulta->bindParam(':modVolumenNegocio', $aFormulario['volumenNegocio']);
-        
         $oConsulta->execute();
 
         // Regreso a la página principal
         header('Location: MtoDepartamentos.php');
+        
     } catch (PDOException $exception) {
         /*
          * Mostrado del código de error y su mensaje.
@@ -137,7 +136,7 @@ if ($bEntradaOK) {
                 color: midnightblue;
                 background-color: lavender;
             }
-
+            
             table{
                 table-layout: fixed;
             }
@@ -175,75 +174,37 @@ if ($bEntradaOK) {
     <body>
         <header>
             <a class="volver" href="MtoDepartamentos.php">Volver</a>
-            <h2>Modificación de departamento</h2>
+            <h2>Creación de departamento</h2>
         </header>
         <main>
             <?php
             /**
              * Si es la primera vez que se accede a la página, o si se ha enviado
-             * el formulario con datos incorectos, se muestra el formulario con
-             * la información del departamento cuyo código se ha pasado por la url.
-             */
-            
-            try {
-                $sConsulta = <<<QUERY
-                    SELECT * FROM T02_Departamento WHERE T02_CodDepartamento = '{$_REQUEST['codDepartamentoEnCurso']}';
-                QUERY;
-
-                // Conexión con la base de datos.
-                $oDB = new PDO(HOST, USER, PASSWORD);
-                $oDB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-                // Ejecución de la consulta.
-                $oConsulta = $oDB->prepare($sConsulta);
-                $oConsulta->execute();
-                $oResultadoConsulta = $oConsulta->fetch();
-                
-                $aFormulario['codDepartamento'] = $oResultadoConsulta['T02_CodDepartamento'];
-                $aFormulario['descDepartamento'] = $oResultadoConsulta['T02_DescDepartamento'];
-                $aFormulario['fechaBaja'] = $oResultadoConsulta['T02_FechaBajaDepartamento'];
-                $aFormulario['volumenNegocio'] = $oResultadoConsulta['T02_VolumenDeNegocio'];
-                 
-            } catch (PDOException $exception) {
-                /*
-                 * Mostrado del código de error y su mensaje.
-                 */
-                echo '<div>Se han encontrado errores:</div><ul>';
-                echo '<li>' . $exception->getCode() . ' : ' . $exception->getMessage() . '</li>';
-                echo '</ul>';
-            } finally {
-                unset($oDB);
-            }
-            
-            /**
-             * Por cada input editable, si la variable $_REQUEST no existe o
-             * su valor es '' (fue limpiada por existir error), muestra la información
-             * que el campo tenía originalmente.
-             * Si existe y tiene valor, muestra esa información.
+             * el formulario con datos incorectos, se muestra el formulario.
              */
             ?>
-            <form action="<?php echo $_SERVER['PHP_SELF'] . "?codDepartamentoEnCurso=" . $aFormulario['codDepartamento'] ?>" method="post">
+            <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
                 <fieldset class="acciones">
-                    <legend>Modificación</legend>
+                    <legend>Nuevo departamento</legend>
                     <table>
                         <tr>
-                            <td><label for="codDepartamento">Código</label></td>
-                            <td><input type="text" id="codDepartamento" name="codDepartamento" value="<?php echo $aFormulario['codDepartamento'] ?>" disabled></td>
-                            <td></td>
+                            <td><label class="obligatorio" for="codDepartamento">Código</label></td>
+                            <td><input class="obligatorio" type="text" id="codDepartamento" name="codDepartamento" value="<?php echo $_REQUEST['codDepartamento']??'' ?>"></td>
+                            <td><?php echo '<span>' . $aErrores['codDepartamento'] . '</span>' ?></td>
                         </tr>
                         <tr>
                             <td><label class="obligatorio" for="descDepartamento">Descripción</label></td>
-                            <td><input class="obligatorio" type="text" id="descDepartamento" name="descDepartamento" value="<?php echo !isset($_REQUEST['descDepartamento']) || $_REQUEST['descDepartamento']==''?$aFormulario['descDepartamento']:$_REQUEST['descDepartamento'];?>"></td>
+                            <td><input class="obligatorio" type="text" id="descDepartamento" name="descDepartamento" value="<?php echo $_REQUEST['descDepartamento']??'' ;?>"></td>
                             <td><?php echo '<span>' . $aErrores['descDepartamento'] . '</span>' ?></td>
                         </tr>
                         <tr>
                             <td><label for="fechaBaja">Fecha baja</label></td>
-                            <td><input type="text" id="fechaBaja" name="fechaBaja" value="<?php echo $aFormulario['fechaBaja'] ?? '-' ?>" disabled=""></td>
+                            <td><input type="text" id="fechaBaja" name="fechaBaja" value="-" disabled></td>
                             <td></td>
                         </tr>
                         <tr>
                             <td><label class="obligatorio" for="volumenNegocio">Volumen negocio</label></td>
-                            <td><input class="obligatorio" type="text" id="volumenNegocio" name="volumenNegocio" value="<?php echo !isset($_REQUEST['volumenNegocio']) || $_REQUEST['volumenNegocio']==''?$aFormulario['volumenNegocio']:$_REQUEST['volumenNegocio'];?>"></td>
+                            <td><input class="obligatorio" type="text" id="volumenNegocio" name="volumenNegocio" value="<?php echo $_REQUEST['volumenNegocio']??'' ?>"></td>
                             <td><?php echo '<span>' . $aErrores['volumenNegocio'] . '</span>' ?></td>
                         </tr>
                     </table>
