@@ -81,8 +81,8 @@ if ($bEntradaOK) {
     // Modificación de la base de datos.
     try {
         $sConsulta = <<<QUERY
-            INSERT INTO Departamento VALUES
-            ('{$aFormulario['codDepartamento']}', '{$aFormulario['descDepartamento']}', null, {$aFormulario['volumenNegocio']});
+            INSERT INTO T02_Departamento(T02_CodDepartamento, T02_DescDepartamento, T02_FechaCreacionDepartamento, T02_VolumenDeNegocio) VALUES
+            ('{$aFormulario['codDepartamento']}', '{$aFormulario['descDepartamento']}', UNIX_TIMESTAMP() ,{$aFormulario['volumenNegocio']});
         QUERY;
 
         // Conexión con la base de datos.

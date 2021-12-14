@@ -176,7 +176,7 @@
 
                 // Query de búsqueda.
                 $sConsulta = <<<QUERY
-                    SELECT * FROM Departamento WHERE descDepartamento LIKE '%{$aFormulario['descDepartamento']}%';
+                    SELECT * FROM T02_Departamento WHERE T02_DescDepartamento LIKE '%{$aFormulario['descDepartamento']}%';
                 QUERY;
 
                 /*
@@ -230,8 +230,12 @@
                     </div>
                     <fieldset class="acciones">
                         <a class="button" href="crearDepartamento.php">Añadir</a>
+                        <!-- 
                         <a class="button" href="importarDepartamentos.php">Importar</a>
                         <a class="button" href="exportarDepartamentos.php">Exportar</a>
+                        -->
+                        <a class="button">Importar</a>
+                        <a class="button">Exportar</a>
                     </fieldset>
                 </div>
             </form>
@@ -251,14 +255,14 @@
                  */
                 foreach ($aDepartamentos as $aDepartamento) {
                     echo '<tr>';
-                    echo "<td>" . $aDepartamento['codDepartamento'] . "</td>";
-                    echo "<td>" . $aDepartamento['descDepartamento'] . "</td>";
-                    echo "<td>" . $aDepartamento['fechaBaja'] . "</td>";
-                    echo "<td>" . $aDepartamento['volumenNegocio'] . "</td>";
+                    echo "<td>" . $aDepartamento['T02_CodDepartamento'] . "</td>";
+                    echo "<td>" . $aDepartamento['T02_DescDepartamento'] . "</td>";
+                    echo "<td>" . $aDepartamento['T02_FechaBajaDepartamento'] . "</td>";
+                    echo "<td>" . $aDepartamento['T02_VolumenDeNegocio'] . "</td>";
                     ?>
-                    <th><a href="editarDepartamento.php?codDepartamentoEnCurso=<?php echo urlencode($aDepartamento['codDepartamento']); ?>"><img src="../webroot/media/img/modify.png" alt="modificar"/></a></th>
-                    <th><a href="eliminarDepartamento.php?codDepartamentoEnCurso=<?php echo urlencode($aDepartamento['codDepartamento']); ?>"><img src="../webroot/media/img/delete.png" alt="eliminar"/></a></th>
-                    <th><a href="verDepartamento.php?codDepartamentoEnCurso=<?php echo urlencode($aDepartamento['codDepartamento']); ?>"><img src="../webroot/media/img/view.png" alt="ver"/></a></th>
+                    <th><a href="editarDepartamento.php?codDepartamentoEnCurso=<?php echo urlencode($aDepartamento['T02_CodDepartamento']); ?>"><img src="../webroot/media/img/modify.png" alt="modificar"/></a></th>
+                    <th><a href="eliminarDepartamento.php?codDepartamentoEnCurso=<?php echo urlencode($aDepartamento['T02_CodDepartamento']); ?>"><img src="../webroot/media/img/delete.png" alt="eliminar"/></a></th>
+                    <th><a href="verDepartamento.php?codDepartamentoEnCurso=<?php echo urlencode($aDepartamento['T02_CodDepartamento']); ?>"><img src="../webroot/media/img/view.png" alt="ver"/></a></th>
                     </tr>
                     <?php
                 }

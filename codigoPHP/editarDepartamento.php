@@ -78,9 +78,9 @@ if ($bEntradaOK) {
     // Modificación de la base de datos.
     try {
         $sConsulta = <<<QUERY
-            UPDATE Departamento SET descDepartamento = :modDescripcion,
-            volumenNegocio = :modVolumenNegocio
-            WHERE codDepartamento= '{$aFormulario['codDepartamento']}';
+            UPDATE T02_Departamento SET T02_DescDepartamento = :modDescripcion,
+            T02_VolumenDeNegocio = :modVolumenNegocio
+            WHERE T02_CodDepartamento= '{$aFormulario['codDepartamento']}';
         QUERY;
 
         // Conexión con la base de datos.
@@ -187,7 +187,7 @@ if ($bEntradaOK) {
             
             try {
                 $sConsulta = <<<QUERY
-                    SELECT * FROM Departamento WHERE codDepartamento = '{$_REQUEST['codDepartamentoEnCurso']}';
+                    SELECT * FROM T02_Departamento WHERE T02_CodDepartamento = '{$_REQUEST['codDepartamentoEnCurso']}';
                 QUERY;
 
                 // Conexión con la base de datos.
@@ -199,10 +199,10 @@ if ($bEntradaOK) {
                 $oConsulta->execute();
                 $oResultadoConsulta = $oConsulta->fetch();
                 
-                $aFormulario['codDepartamento'] = $oResultadoConsulta['codDepartamento'];
-                $aFormulario['descDepartamento'] = $oResultadoConsulta['descDepartamento'];
-                $aFormulario['fechaBaja'] = $oResultadoConsulta['fechaBaja'];
-                $aFormulario['volumenNegocio'] = $oResultadoConsulta['volumenNegocio'];
+                $aFormulario['codDepartamento'] = $oResultadoConsulta['T02_CodDepartamento'];
+                $aFormulario['descDepartamento'] = $oResultadoConsulta['T02_DescDepartamento'];
+                $aFormulario['fechaBaja'] = $oResultadoConsulta['T02_FechaBajaDepartamento'];
+                $aFormulario['volumenNegocio'] = $oResultadoConsulta['T02_VolumenDeNegocio'];
                  
             } catch (PDOException $exception) {
                 /*

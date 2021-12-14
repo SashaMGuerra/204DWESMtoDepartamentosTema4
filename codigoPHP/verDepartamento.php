@@ -91,7 +91,7 @@ if (isset($_REQUEST['aceptar'])) {
              */
             try {
                 $sConsulta = <<<QUERY
-                    SELECT * FROM Departamento WHERE codDepartamento = '{$_REQUEST['codDepartamentoEnCurso']}';
+                    SELECT * FROM T02_Departamento WHERE T02_CodDepartamento = '{$_REQUEST['codDepartamentoEnCurso']}';
                 QUERY;
 
                 // Conexión con la base de datos.
@@ -106,11 +106,11 @@ if (isset($_REQUEST['aceptar'])) {
                 /**
                  * Recogida de los datos del departamento.
                  */
-                $aFormulario['codDepartamento'] = $oResultadoConsulta['codDepartamento'];
-                $aFormulario['descDepartamento'] = $oResultadoConsulta['descDepartamento'];
-                $aFormulario['fechaBaja'] = $oResultadoConsulta['fechaBaja'];
-                $aFormulario['volumenNegocio'] = $oResultadoConsulta['volumenNegocio'];
-                
+                $aFormulario['codDepartamento'] = $oResultadoConsulta['T02_CodDepartamento'];
+                $aFormulario['descDepartamento'] = $oResultadoConsulta['T02_DescDepartamento'];
+                $aFormulario['fechaBaja'] = $oResultadoConsulta['T02_FechaBajaDepartamento'];
+                $aFormulario['volumenNegocio'] = $oResultadoConsulta['T02_VolumenDeNegocio'];
+            
             } catch (PDOException $exception) {
                 /*
                  * Mostrado del código de error y su mensaje.
