@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <?php
 /**
  * @author Sasha
@@ -14,6 +13,7 @@
  */
 if(isset($_REQUEST['cancelar'])){
     header('Location: MtoDepartamentos.php');
+    exit;
 }
 
 //Librería de validación.
@@ -46,6 +46,41 @@ if(isset($_REQUEST['aceptar'])){
 
     // Registro de errores: validación de campos.
     $aErrores['codDepartamento'] = validacionFormularios::comprobarAlfabetico($_REQUEST['codDepartamento'], 3, 3, OBLIGATORIO);
+    try {
+        $sConsulta = <<<QUERY
+            SELECT T02_CodDepartamento FROM T02_Departamento
+            WHERE T02_CodDepartamento = '{$_REQUEST['codDepartamento']}';
+        QUERY;
+
+        // Conexión con la base de datos.
+        $oDB = new PDO(HOST, USER, PASSWORD);
+
+        // Mostrado de las excepciones.
+        $oDB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        // Ejecución de la consulta.
+        $oConsulta = $oDB->prepare($sConsulta);
+        $oConsulta->execute();
+        
+        /**
+         * Si la consulta arroja algún resultado, significa que un departamento
+         * con ese código ya existe e indicaría un error.
+         */
+        if($oConsulta->fetchObject()){
+            $aErrores['codDepartamento'] = 'Ya existe un departamento con ese código.';
+        }
+        
+    } catch (PDOException $exception) {
+        /*
+         * Mostrado del código de error y su mensaje.
+         */
+        echo '<div>Se han encontrado errores:</div><ul>';
+        echo '<li>' . $exception->getCode() . ' : ' . $exception->getMessage() . '</li>';
+        echo '</ul>';
+    } finally {
+        unset($oDB);
+    }
+    
     $aErrores['descDepartamento'] = validacionFormularios::comprobarAlfanumerico($_REQUEST['descDepartamento'], 255, 5, OBLIGATORIO);
     $aErrores['volumenNegocio'] = validacionFormularios::comprobarFloat($_REQUEST['volumenNegocio'], 5000, 0, OBLIGATORIO);
 
@@ -97,6 +132,7 @@ if ($bEntradaOK) {
 
         // Regreso a la página principal
         header('Location: MtoDepartamentos.php');
+        exit;
         
     } catch (PDOException $exception) {
         /*
@@ -111,6 +147,7 @@ if ($bEntradaOK) {
 }
 
 ?>
+<!DOCTYPE html>
 <html>
     <head>
         <meta charset="UTF-8">

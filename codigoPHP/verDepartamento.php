@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <?php
 /**
  * @author Sasha
@@ -29,8 +28,10 @@ $aFormulario = [
  */
 if (isset($_REQUEST['aceptar'])) {
     header('Location: MtoDepartamentos.php');
+    exit;
 }
 ?>
+<!DOCTYPE html>
 <html lang="es">
     <head>
         <meta charset="UTF-8">
