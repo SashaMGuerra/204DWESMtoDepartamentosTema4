@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <?php
 /**
  * @author Sasha
@@ -13,6 +12,7 @@
  */
 if (isset($_REQUEST['cancelar'])) {
     header('Location: MtoDepartamentos.php');
+    exit;
 }
 
 //Librería de validación.
@@ -54,6 +54,7 @@ if (isset($_REQUEST['aceptar'])) {
 
         // Regreso a la página principal
         header('Location: MtoDepartamentos.php');
+        exit;
     } catch (PDOException $exception) {
         /*
          * Mostrado del código de error y su mensaje.
@@ -66,6 +67,7 @@ if (isset($_REQUEST['aceptar'])) {
     }
 }
 ?>
+<!DOCTYPE html>
 <html lang="es">
     <head>
         <meta charset="UTF-8">
